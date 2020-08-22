@@ -23,6 +23,10 @@ export class TodoService {
     return this.usersRepository.delete(id);
   }
 
+  update(id: string, todo: TodoEntity): any {
+    return this.usersRepository.update(id, todo);
+  }
+
   async insert(todo: TodoEntity): Promise<boolean> {
     try {
       await this.usersRepository.insert(todo);
