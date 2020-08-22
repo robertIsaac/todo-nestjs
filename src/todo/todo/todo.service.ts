@@ -15,6 +15,10 @@ export class TodoService {
     return this.usersRepository.find();
   }
 
+  find(id: string): Promise<TodoEntity> {
+    return this.usersRepository.findOne(id);
+  }
+
   async insert(todo: TodoEntity): Promise<boolean> {
     try {
       await this.usersRepository.insert(todo);

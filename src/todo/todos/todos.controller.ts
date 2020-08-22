@@ -25,8 +25,8 @@ export class TodosController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): TodoDto {
-    return {id, name: 'TODO', completed: false};
+  findOne(@Param('id') id: string): Promise<TodoEntity> {
+    return this.todoService.find(id);
   }
 
   @Put(':id')
