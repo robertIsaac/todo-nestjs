@@ -15,11 +15,14 @@ export class TodoService {
     return this.usersRepository.find();
   }
 
-  async insert(todo: TodoEntity): Promise<any> {
-    console.log(todo);
-    const a = await this.usersRepository.insert(todo);
-    console.log(a);
-    return a;
+  async insert(todo: TodoEntity): Promise<boolean> {
+    try {
+      await this.usersRepository.insert(todo);
+      return true;
+    }
+    catch (e) {
+      return false;
+    }
   }
 
 }

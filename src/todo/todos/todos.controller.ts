@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Param, Post, Put } from '@nestjs/common';
 import { TodoDto } from '../../TDOs/todoDto';
 import { TodoService } from '../todo/todo.service';
 import { TodoEntity } from '../todo.entity';
@@ -12,8 +12,11 @@ export class TodosController {
   @Post()
   @HttpCode(204)
   async create(@Body() todoDto: TodoEntity): Promise<void> {
-    await this.todoService.insert(todoDto);
-    return;
+    if (await this.todoService.insert(todoDto)) {
+      return;
+    } else {
+      throw new HttpException('duplicate name', HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Get()
