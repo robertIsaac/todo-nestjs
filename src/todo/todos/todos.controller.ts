@@ -38,8 +38,8 @@ export class TodosController {
 
   @Delete(':id')
   @HttpCode(204)
-  remove(@Param('id') id: string): void {
-    console.log(id);
+  async remove(@Param('id') id: string): Promise<void> {
+    await this.todoService.remove(id);
     return;
   }
 
