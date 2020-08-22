@@ -1,18 +1,24 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put } from '@nestjs/common';
 import { TodoDto } from '../../TDOs/todoDto';
+import { TodoService } from '../todo/todo.service';
+import { TodoEntity } from '../todo.entity';
 
 @Controller('todos')
 export class TodosController {
+
+  constructor(private todoService: TodoService) {
+  }
+
   @Post()
   @HttpCode(204)
-  create(@Body() todoDto: TodoDto): void {
-    console.log(todoDto);
+  async create(@Body() todoDto: TodoEntity): Promise<void> {
+    await this.todoService.insert(todoDto);
     return;
   }
 
   @Get()
-  findAll(): TodoDto[] {
-    return [];
+  async findAll(): Promise<TodoEntity[]> {
+    return this.todoService.findAll();
   }
 
   @Get(':id')
