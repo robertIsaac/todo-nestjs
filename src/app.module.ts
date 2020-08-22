@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
-import { AppService } from './app.service';
-import { TodosController } from './todos/todos.controller';
+import { TodoModule } from './todo/todo.module';
 
 @Module({
-  imports: [],
-  controllers: [
-    TodosController,
+  imports: [
+    TodoModule,
   ],
-  providers: [AppService],
+  controllers: [
+  ],
+  providers: [
+  ],
 })
 export class AppModule {
 }

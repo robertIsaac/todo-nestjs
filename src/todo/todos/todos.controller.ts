@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put } from '@nestjs/common';
-import { TodoDto } from '../TDOs/todoDto';
+import { TodoDto } from '../../TDOs/todoDto';
 
 @Controller('todos')
 export class TodosController {
