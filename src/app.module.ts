@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TodoEntity } from './todo/todo.entity';
 import { TodoModule } from './todo/todo.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { TodoModule } from './todo/todo.module';
       autoLoadEntities: true,
     }),
     TodoModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [
   ],
