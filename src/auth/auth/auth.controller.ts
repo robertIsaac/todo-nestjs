@@ -1,26 +1,37 @@
-import { Controller, Request, Post, UseGuards, Get } from '@nestjs/common';
+import { Controller, Request, Post, UseGuards, Get, HttpException, HttpStatus, Body } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { User } from '../../users/users.service';
+import { UsersService } from '../../users/users.service';
 import { AuthService } from '../auth.service';
+import { UserEntity } from '../../users/user.entity';
 
 @Controller('auth')
 export class AuthController {
 
   constructor(
     private authService: AuthService,
+    private usersService: UsersService,
   ) {
   }
 
   @UseGuards(AuthGuard('local'))
   @Post('login')
-  async login(@Request() req: { user: User }): Promise<User> {
+  async login(@Request() req: { user: UserEntity }): Promise<{ access_token: string }> {
     return this.authService.login(req.user);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Get('profile')
-  getProfile(@Request() req: {user: User}): User {
-    return req.user;
+  getProfile(@Request() req: {user: UserEntity}): Promise<Omit<UserEntity, 'password'> | undefined> {
+    return this.usersService.findById(req.user.id);
+  }
+
+  @Post('register')
+  async register(@Body() user: UserEntity): Promise<{ access_token: string }> {
+    const token = await this.authService.register(user);
+    if (token) {
+      return token;
+    }
+    throw new HttpException('username exists', HttpStatus.BAD_REQUEST);
   }
 
 }

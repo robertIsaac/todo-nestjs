@@ -4,6 +4,7 @@ import { TodoEntity } from './todo/todo.entity';
 import { TodoModule } from './todo/todo.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { UserEntity } from './users/user.entity';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { UsersModule } from './users/users.module';
       username: '',
       password: '',
       database: 'todo',
-      entities: [TodoEntity],
+      entities: [TodoEntity, UserEntity],
       synchronize: true,
       autoLoadEntities: true,
     }),

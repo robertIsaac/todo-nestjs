@@ -8,28 +8,28 @@ export class TodoService {
 
   constructor(
     @InjectRepository(TodoEntity)
-    private usersRepository: Repository<TodoEntity>,
+    private todosRepository: Repository<TodoEntity>,
   ) {}
 
   findAll(): Promise<TodoEntity[]> {
-    return this.usersRepository.find();
+    return this.todosRepository.find();
   }
 
   find(id: string): Promise<TodoEntity> {
-    return this.usersRepository.findOne(id);
+    return this.todosRepository.findOne(id);
   }
 
   remove(id: string): any {
-    return this.usersRepository.delete(id);
+    return this.todosRepository.delete(id);
   }
 
   update(id: string, todo: TodoEntity): any {
-    return this.usersRepository.update(id, todo);
+    return this.todosRepository.update(id, todo);
   }
 
   async insert(todo: TodoEntity): Promise<boolean> {
     try {
-      await this.usersRepository.insert(todo);
+      await this.todosRepository.insert(todo);
       return true;
     }
     catch (e) {

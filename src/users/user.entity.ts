@@ -2,14 +2,14 @@ import { Entity, Column, ObjectIdColumn } from 'typeorm';
 import { Index } from 'typeorm';
 
 @Entity()
-export class TodoEntity {
+export class UserEntity {
   @ObjectIdColumn()
   id: string;
 
   @Column()
   @Index({ unique: true })
-  name: string;
+  username: string;
 
   @Column()
-  completed: boolean;
+  password: string;
 }
