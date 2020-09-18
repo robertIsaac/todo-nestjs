@@ -14,7 +14,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         host: configService.get('MONGO_HOST'),
         port: +configService.get<number>('MONGO_PORT'),
         username: configService.get('MONGO_USERNAME'),
-        password: configService.get('MONGO_PASSWORD'),
+        password: encodeURIComponent(configService.get('MONGO_PASSWORD')),
         database: configService.get('MONGO_DATABASE'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: true,
