@@ -1,23 +1,28 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TodoEntity } from './todo/todo.entity';
 import { TodoModule } from './todo/todo.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { UserEntity } from './users/user.entity';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mongodb',
-      host: '127.0.0.1',
-      port: 27017,
-      username: '',
-      password: '',
-      database: 'todo',
-      entities: [TodoEntity, UserEntity],
-      synchronize: true,
-      autoLoadEntities: true,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'mongodb',
+        host: configService.get('MONGO_HOST'),
+        port: +configService.get<number>('MONGO_PORT'),
+        username: configService.get('MONGO_USERNAME'),
+        password: configService.get('MONGO_PASSWORD'),
+        database: configService.get('MONGO_DATABASE'),
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        synchronize: true,
+      }),
+      inject: [ConfigService],
+    }),
+    ConfigModule.forRoot({
+      isGlobal: true,
     }),
     TodoModule,
     AuthModule,
