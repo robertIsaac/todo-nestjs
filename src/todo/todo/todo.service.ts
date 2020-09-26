@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TodoEntity } from '../todo.entity';
+import { REQUEST } from '@nestjs/core';
+import { UserEntity } from '../../users/user.entity';
 
 @Injectable()
 export class TodoService {
@@ -9,10 +11,11 @@ export class TodoService {
   constructor(
     @InjectRepository(TodoEntity)
     private todosRepository: Repository<TodoEntity>,
+    @Inject(REQUEST) private readonly request: {user: UserEntity},
   ) {}
 
   findAll(): Promise<TodoEntity[]> {
-    return this.todosRepository.find();
+    return this.todosRepository.find({ where: {'user.id': this.request.user.id}});
   }
 
   find(id: string): Promise<TodoEntity> {
@@ -28,6 +31,7 @@ export class TodoService {
   }
 
   async insert(todo: TodoEntity): Promise<boolean> {
+    todo.user = this.request.user;
     try {
       await this.todosRepository.insert(todo);
       return true;

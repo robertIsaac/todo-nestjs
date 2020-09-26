@@ -1,5 +1,4 @@
 import { Entity, Column, ObjectIdColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { Index } from 'typeorm';
 import { UserEntity } from '../users/user.entity';
 
 @Entity()
@@ -8,7 +7,6 @@ export class TodoEntity {
   id: string;
 
   @Column()
-  @Index({ unique: true })
   name: string;
 
   @Column()

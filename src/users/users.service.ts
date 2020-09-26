@@ -21,7 +21,7 @@ export class UsersService {
     if (!result) {
       return;
     }
-    const { password, ...user } = await this.usersRepository.findOne(id);
+    const { password, ...user } = result;
     return user;
   }
 
