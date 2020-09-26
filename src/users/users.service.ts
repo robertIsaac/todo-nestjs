@@ -17,8 +17,16 @@ export class UsersService {
   }
 
   async findById(id: string): Promise<Omit<UserEntity, 'password'> | undefined> {
+    const result = await this.usersRepository.findOne(id);
+    if (!result) {
+      return;
+    }
     const { password, ...user } = await this.usersRepository.findOne(id);
     return user;
+  }
+
+  async getFullUser(id: string): Promise<UserEntity | undefined> {
+    return await this.usersRepository.findOne(id);
   }
 
   async insert(user: UserEntity): Promise<InsertResult | false> {

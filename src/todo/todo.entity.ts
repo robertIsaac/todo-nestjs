@@ -1,5 +1,6 @@
-import { Entity, Column, ObjectIdColumn } from 'typeorm';
+import { Entity, Column, ObjectIdColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { Index } from 'typeorm';
+import { UserEntity } from '../users/user.entity';
 
 @Entity()
 export class TodoEntity {
@@ -12,4 +13,9 @@ export class TodoEntity {
 
   @Column()
   completed: boolean;
+
+  @Column({ nullable: false })
+  @ManyToOne(type => UserEntity, user => user.todos)
+  @JoinColumn()
+  user: UserEntity;
 }

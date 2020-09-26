@@ -1,5 +1,6 @@
-import { Entity, Column, ObjectIdColumn } from 'typeorm';
+import { Entity, Column, ObjectIdColumn, OneToMany } from 'typeorm';
 import { Index } from 'typeorm';
+import { TodoEntity } from '../todo/todo.entity';
 
 @Entity()
 export class UserEntity {
@@ -12,4 +13,7 @@ export class UserEntity {
 
   @Column()
   password: string;
+
+  @OneToMany(type => TodoEntity, photo => photo.user)
+  todos: TodoEntity[];
 }

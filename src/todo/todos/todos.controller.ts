@@ -9,11 +9,13 @@ import {
   Param,
   Post,
   Put,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import { TodoService } from '../todo/todo.service';
 import { TodoEntity } from '../todo.entity';
 import { AuthGuard } from '@nestjs/passport';
+import { UserEntity } from '../../users/user.entity';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('todos')
@@ -24,7 +26,8 @@ export class TodosController {
 
   @Post()
   @HttpCode(204)
-  async create(@Body() todoDto: TodoEntity): Promise<void> {
+  async create(@Request() req: {user: UserEntity}, @Body() todoDto: TodoEntity): Promise<void> {
+    todoDto.user = req.user;
     if (await this.todoService.insert(todoDto)) {
       return;
     } else {
