@@ -22,11 +22,17 @@ export class TodoService {
     return this.todosRepository.findOne(id);
   }
 
-  remove(id: string): any {
+  async remove(id: string): Promise<any> {
+    if (!await this.isTodoForCurrentUser(id)) {
+      return false;
+    }
     return this.todosRepository.delete(id);
   }
 
-  update(id: string, todo: TodoEntity): any {
+  async update(id: string, todo: TodoEntity): Promise<any> {
+    if (!await this.isTodoForCurrentUser(id)) {
+      return false;
+    }
     return this.todosRepository.update(id, todo);
   }
 
@@ -37,6 +43,13 @@ export class TodoService {
       return true;
     }
     catch (e) {
+      return false;
+    }
+  }
+
+  private async isTodoForCurrentUser(id: string) {
+    const todo = await this.todosRepository.findOne(id);
+    if (todo.userId?.toString() !== this.request.user.id.toString()) {
       return false;
     }
   }

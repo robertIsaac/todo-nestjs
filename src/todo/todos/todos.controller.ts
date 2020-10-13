@@ -44,15 +44,21 @@ export class TodosController {
 
   @Put(':id')
   @HttpCode(204)
-  update(@Param('id') id: string, @Body() todoDto: TodoEntity): void {
-    this.todoService.update(id, todoDto);
+  async update(@Param('id') id: string, @Body() todoDto: TodoEntity): Promise<void> {
+    const response = await this.todoService.update(id, todoDto);
+    if (response === false) {
+      throw new HttpException(`you don't have permission to this todo item`, HttpStatus.FORBIDDEN);
+    }
     return;
   }
 
   @Delete(':id')
   @HttpCode(204)
   async remove(@Param('id') id: string): Promise<void> {
-    await this.todoService.remove(id);
+    const response = await this.todoService.remove(id);
+    if (response === false) {
+      throw new HttpException(`you don't have permission to this todo item`, HttpStatus.FORBIDDEN);
+    }
     return;
   }
 
