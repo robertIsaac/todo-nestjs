@@ -15,7 +15,7 @@ export class TodoService {
   ) {}
 
   findAll(): Promise<TodoEntity[]> {
-    return this.todosRepository.find({ where: {'user.id': this.request.user.id}});
+    return this.todosRepository.find({userId: this.request.user.id});
   }
 
   find(id: string): Promise<TodoEntity> {
@@ -31,7 +31,7 @@ export class TodoService {
   }
 
   async insert(todo: TodoEntity): Promise<boolean> {
-    todo.user = this.request.user;
+    todo.userId = this.request.user.id;
     try {
       await this.todosRepository.insert(todo);
       return true;
