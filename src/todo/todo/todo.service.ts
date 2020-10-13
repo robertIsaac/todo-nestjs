@@ -49,9 +49,8 @@ export class TodoService {
 
   private async isTodoForCurrentUser(id: string) {
     const todo = await this.todosRepository.findOne(id);
-    if (todo.userId?.toString() !== this.request.user.id.toString()) {
-      return false;
-    }
+    return todo?.userId?.toString() === this.request.user.id.toString();
+
   }
 
 }
