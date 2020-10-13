@@ -11,6 +11,9 @@ export class TodoEntity {
   @Column()
   completed: boolean;
 
+  @Column()
+  time: Date;
+
   @Column({ nullable: false })
   userId: string;
 }
