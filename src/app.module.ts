@@ -9,16 +9,36 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
   imports: [
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'mongodb',
-        host: configService.get('MONGO_HOST'),
-        port: +configService.get<number>('MONGO_PORT'),
-        username: configService.get('MONGO_USERNAME'),
-        password: encodeURIComponent(configService.get('MONGO_PASSWORD')),
-        database: configService.get('MONGO_DATABASE'),
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: true,
-      }),
+      useFactory: (configService: ConfigService) => {
+        const mongoHost = configService.get('MONGO_HOST');
+        const mongoPort = configService.get('MONGO_PORT');
+        const mongoUsername = configService.get('MONGO_USERNAME');
+        const mongoPassword = configService.get('MONGO_PASSWORD');
+        const mongoDatabase = configService.get('MONGO_DATABASE');
+        const mongoConnectionFormat = configService.get('MONGO_CONNECTION_FORMAT');
+        const mongoConnectionOptions = configService.get('MONGO_CONNECTION_OPTIONS');
+
+        const port = mongoPort ? `:${mongoPort}` : '';
+
+        let mongoCredentials = '';
+        if (mongoUsername && mongoPassword) {
+          mongoCredentials = `${mongoUsername}:${mongoPassword}@`;
+        } else if (mongoUsername) {
+          mongoCredentials = `${mongoUsername}@`;
+        }
+
+        const options = mongoConnectionOptions ? `?${mongoConnectionOptions}` : '';
+
+        const mongoUrl = `${mongoConnectionFormat}://${mongoCredentials}${mongoHost}${port}/${mongoDatabase}${options}`;
+
+        return {
+          type: 'mongodb',
+          url: mongoUrl,
+          ssl: configService.get('MONGO_SSL', 'true') === 'true',
+          entities: [__dirname + '/**/*.entity{.ts,.js}'],
+          synchronize: true,
+        };
+      },
       inject: [ConfigService],
     }),
     ConfigModule.forRoot({
